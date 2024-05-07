@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@assets": ["src/assets"],
+        "@components": ["src/components"],
+        "@custom-redux": ["src/custom-redux"],
+        "@helper": ["src/helper"],
+        "@styles": ["src/styles"],
+        "@pages": ["src/pages"]
+      }
+    }
+}
