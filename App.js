@@ -1,5 +1,12 @@
 import React, {useEffect} from 'react';
-import {View, LogBox, Button} from 'react-native';
+import {View, LogBox, Button, Pressable, Animated, Text} from 'react-native';
+
+// This import is to initialize gesture handler
+import 'react-native-gesture-handler';
+
+// Additional module imports
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import MainNavigation from './src/navigation/MainNavigation';
 
 export default function App(props) {
   useEffect(() => {
@@ -8,9 +15,8 @@ export default function App(props) {
   }, []);
 
   return (
-    <View>
-      <Button title='Save'></Button>
-      <Button title='Console'></Button>
-    </View>
+    <SafeAreaProvider>
+        <MainNavigation />
+    </SafeAreaProvider>
   );
 }

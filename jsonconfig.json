@@ -7,7 +7,8 @@
         "@custom-redux": ["src/custom-redux"],
         "@helper": ["src/helper"],
         "@styles": ["src/styles"],
-        "@pages": ["src/pages"]
+        "@pages": ["src/pages"],
+        "@navigation": ["src/navigation"]
       }
     }
 }
