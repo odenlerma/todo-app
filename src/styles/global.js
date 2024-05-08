@@ -7,7 +7,7 @@ import { scalingPixel } from '@helper/utils'
 export const ANIMATIONMS = 300;
 
 export const BORDERRADIUS = 12;
-export const BORDERWIDTH = 2 / PixelRatio.getPixelSizeForLayoutSize(1);
+export const BORDERWIDTH = 2;
 
 export const COLORS = {
 	default_background: '#FAFFFE',
@@ -291,6 +291,12 @@ export const BACKGROUND = StyleSheet.create({
     "bg_info": {
         backgroundColor: COLORS.info
     },
+})
+
+export const CONTAINER = StyleSheet.create({
+	main: {
+		padding: SPACING.default
+	}
 })
 
 export const W100 = {

@@ -53,6 +53,11 @@ const styles = StyleSheet.create({
         ...STYLE.TEXTCOLOR.color_gray,
         ...STYLE.TEXTFONTSIZE.default
     },
+    gray_default_strikethrough: {
+        ...STYLE.TEXTCOLOR.color_gray,
+        ...STYLE.TEXTFONTSIZE.default,
+        textDecorationLine: 'line-through',
+    },
     info_default: {
         ...STYLE.TEXTCOLOR.color_info,
         ...STYLE.TEXTFONTSIZE.default
@@ -96,6 +101,11 @@ const styles = StyleSheet.create({
         ...STYLE.TEXTCOLOR.color_gray,
         ...STYLE.TEXTFONTSIZE.sm
     },
+    gray_sm_strikethrough: {
+        ...STYLE.TEXTCOLOR.color_gray,
+        ...STYLE.TEXTFONTSIZE.sm,
+        textDecorationLine: 'line-through',
+    },
     success_sm: {
         ...STYLE.TEXTCOLOR.color_success,
         ...STYLE.TEXTFONTSIZE.sm
@@ -129,7 +139,12 @@ const styles = StyleSheet.create({
     },
     gray_secondary: {
         ...STYLE.TEXTCOLOR.color_gray,
-        ...STYLE.TEXTFONTSIZE.secondary
+        ...STYLE.TEXTFONTSIZE.secondary,
+    },
+    gray_secondary_strikethrough: {
+        ...STYLE.TEXTCOLOR.color_gray,
+        ...STYLE.TEXTFONTSIZE.secondary,
+        textDecorationLine: 'line-through',
     },
     success_secondary: {
         ...STYLE.TEXTCOLOR.color_success,
