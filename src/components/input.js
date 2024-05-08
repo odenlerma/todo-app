@@ -23,6 +23,7 @@ export const CUSTOM_INPUT = ({
     title='',
     isDisabled = false,
     textInputStyle = {},
+    defaultValue='',
     ...props
 }) => {
     const inputRef = useRef(null)
@@ -50,8 +51,8 @@ export const CUSTOM_INPUT = ({
                     />
                 ):(
                     <CUSTOM_TEXT
-                        text={!UTILS.isEmpty(props?.defaultValue) ? props?.defaultValue : placeholder}
-                        customTextStyles={!UTILS.isEmpty(props?.defaultValue) ? styles.text_default : styles.text_gray}
+                        text={!UTILS.isEmpty(defaultValue) ? defaultValue : placeholder}
+                        customTextStyles={UTILS.isEmpty(defaultValue) ? styles.text_default : styles.text_gray}
                     />
                 )
                 }
@@ -96,23 +97,13 @@ const styles = StyleSheet.create({
         backgroundColor: STYLE.COLORS.white,
     },
     textinputDisabled: {
-        ...Platform.select({
-            ios: {
-                paddingVertical: STYLE.SPACING.s3,
-            },
-            android: {
-                paddingVertical: 0,
-            },
-            default: {
-                paddingVertical: STYLE.SPACING.s3,
-            },
-        }),
+        paddingVertical: STYLE.SPACING.s3,
         paddingHorizontal: STYLE.SPACING.default,
         overflow: 'hidden',
         borderRadius: STYLE.BORDERRADIUS,
         borderWidth: STYLE.BORDERWIDTH, 
         borderColor: STYLE.COLORS.gray,
-        backgroundColor: STYLE.COLORS.gray,
+        backgroundColor: STYLE.COLORS.white,
     },
 })
 

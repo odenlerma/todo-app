@@ -44,9 +44,9 @@ export const SIZE = {
     secondary: 24,
     m: 28,
 	lg2: 32,
-    lg: 42,
-    xl: 48,
-	xxl: 61
+    lg: 36,
+    xl: 42,
+	xxl: 48
 }
 
 
@@ -295,7 +295,8 @@ export const BACKGROUND = StyleSheet.create({
 
 export const CONTAINER = StyleSheet.create({
 	main: {
-		paddingHorizontal: SPACING.default
+		paddingHorizontal: SPACING.default,
+		flex: 1
 	}
 })
 

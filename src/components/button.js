@@ -27,7 +27,7 @@ const iconlist = {
     check: <SVG.CUSTOM_SVG_CHECK size={BUTTON_ICON_SIZE} />,
     unchecked: <SVG.CUSTOM_SVG_UNCHECKED size={BUTTON_ICON_SIZE} />,
     mark: <SVG.CUSTOM_SVG_MARKED size={BUTTON_ICON_SIZE} />,
-    unmarked: <SVG.CUSTOM_SVG_UNMARKED size={BUTTON_ICON_SIZE} />,
+    unmarked: <SVG.CUSTOM_SVG_NOTMARKED size={BUTTON_ICON_SIZE} />,
 }
 
 const BUTTON  = ({
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
         ...button
     },
     plain_nopadding: {
-        marginBottom: 0,
+       
     },
     outline: {
         ...button,

@@ -121,7 +121,7 @@ export default () => {
 const EMPTY_TASK = ({navigation}) => (
     <View style={STYLE.FLEX.CENTER}>
         <COMPONENTS.CUSTOM_SVG_NOTASK size={250} />
-        <COMPONENTS.CUSTOM_TEXT numberOfLines={2} textType="primary_secondary" customStyles={styles.centerText} text="Couldn't find any tasks? Let's get started listing your tasks for a more productive day!" />
+        <COMPONENTS.CUSTOM_TEXT numberOfLines={2} textType="primary_default" customStyles={styles.centerText} text="Couldn't find any tasks? Let's get started listing your tasks for a more productive day!" />
         <COMPONENTS.CUSTOM_BUTTON
             text='+ Add Task'
             type="secondary"

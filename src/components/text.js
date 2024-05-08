@@ -195,6 +195,10 @@ const styles = StyleSheet.create({
         ...STYLE.TEXTCOLOR.color_secondary,
         ...STYLE.TEXTFONTSIZE.lg
     },
+    primary_lg: {
+        ...STYLE.TEXTCOLOR.color_primary,
+        ...STYLE.TEXTFONTSIZE.lg
+    },
 
 
     //lg2
