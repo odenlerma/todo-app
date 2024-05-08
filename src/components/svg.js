@@ -13,6 +13,9 @@ import { NOTMARKED_SVG } from '@assets/svg/not-marked';
 import { SEARCH_SVG } from '@assets/svg/search';
 import { SORT_SVG } from '@assets/svg/sort';
 import { UNCHECKED_SVG } from '@assets/svg/uncheck';
+import { NORESULT_SVG } from '@assets/svg/no-result';
+import { NOTASK_SVG } from '@assets/svg/no-task';
+import { SORTR_SVG } from '@assets/svg/sort-r.js';
 
 
 const DEFAULT_SVG_SIZE = 42;
@@ -109,6 +112,15 @@ const SORTSVGCSS = ({size=DEFAULT_SVG_SIZE}) => {
 }   
 export const CUSTOM_SVG_SORT= React.memo(SORTSVGCSS)
 
+// SORTR_R
+const SORTR = SORTR_SVG
+const SORTRSVGCSS = ({size=DEFAULT_SVG_SIZE}) => {
+    return(
+        <SvgCss xml={SORTR} width={size} height={size}/>
+    )
+}   
+export const CUSTOM_SVG_SORTR= React.memo(SORTRSVGCSS)
+
 
 // UNCHECKED
 const UNCHECKED = UNCHECKED_SVG
@@ -118,3 +130,22 @@ const UNCHECKEDSVGCSS = ({size=DEFAULT_SVG_SIZE}) => {
     )
 }   
 export const CUSTOM_SVG_UNCHECKED= React.memo(UNCHECKEDSVGCSS)
+
+// NORESULT
+const NORESULT = NORESULT_SVG
+const NORESULTSVGCSS = ({size=DEFAULT_SVG_SIZE}) => {
+    return(
+        <SvgCss xml={NORESULT} width={size} height={size}/>
+    )
+}   
+export const CUSTOM_SVG_NORESULT= React.memo(NORESULTSVGCSS)
+
+
+// NOTASK
+const NOTASK = NOTASK_SVG
+const NOTASKSVGCSS = ({size=250}) => {
+    return(
+        <SvgCss xml={NOTASK} width={size} height={size}/>
+    )
+}   
+export const CUSTOM_SVG_NOTASK= React.memo(NOTASKSVGCSS)

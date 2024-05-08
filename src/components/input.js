@@ -29,11 +29,13 @@ export const CUSTOM_INPUT = ({
 
     return (
         <View style={styles.container}>
-            <CUSTOM_TEXT
-                text={title}
-                customStyles={styles.labelcontainer}
-            />
-        
+            {!UTILS.isEmpty(title) && (
+                <CUSTOM_TEXT
+                    text={title}
+                    customStyles={styles.labelcontainer}
+                />
+            )}
+
             <View style={isDisabled ? styles.textinputDisabled : styles.textinput}>
                 {!isDisabled ? (
                     <TextInput

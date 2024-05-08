@@ -22,7 +22,7 @@ const TEXT = ({
     return(
         <Text
             style={[styles[textType], customStyles, numberOfLines == null ? styles.text: {}]} 
-            adjustsFontSizeToFit={true}
+            adjustsFontSizeToFit={false}
             numberOfLines={numberOfLines}
             ellipsizeMode={!UTILS.isEmpty(ellipsizeMode) ? ellipsizeMode : 'tail'}>{text}
         </Text>

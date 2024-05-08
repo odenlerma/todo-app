@@ -295,7 +295,7 @@ export const BACKGROUND = StyleSheet.create({
 
 export const CONTAINER = StyleSheet.create({
 	main: {
-		padding: SPACING.default
+		paddingHorizontal: SPACING.default
 	}
 })
 

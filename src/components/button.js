@@ -11,6 +11,7 @@ import * as SVG from './svg';
     - customStyles - object - additional styles for button
     - icon - string (options: see iconlist) - left icon component
     - isBlock - bool - full width == true, hug content == false
+    - customTextStyle - string - (options: see text.js styles for options) if you want other text styles.
 */
 
 const BUTTON_ICON_SIZE = STYLE.SIZE.m
@@ -20,16 +21,26 @@ const iconlist = {
     close: <SVG.CUSTOM_SVG_CLOSE size={BUTTON_ICON_SIZE} />,
     delete: <SVG.CUSTOM_SVG_DELETE size={BUTTON_ICON_SIZE}/>,
     edit: <SVG.CUSTOM_SVG_EDIT size={BUTTON_ICON_SIZE}/>,
+    search: <SVG.CUSTOM_SVG_SEARCH size={BUTTON_ICON_SIZE} />,
+    sort: <SVG.CUSTOM_SVG_SORT size={BUTTON_ICON_SIZE} />,
+    sortr: <SVG.CUSTOM_SVG_SORTR size={BUTTON_ICON_SIZE} />,
+    check: <SVG.CUSTOM_SVG_CHECK size={BUTTON_ICON_SIZE} />,
+    unchecked: <SVG.CUSTOM_SVG_UNCHECKED size={BUTTON_ICON_SIZE} />,
+    mark: <SVG.CUSTOM_SVG_MARKED size={BUTTON_ICON_SIZE} />,
+    unmarked: <SVG.CUSTOM_SVG_UNMARKED size={BUTTON_ICON_SIZE} />,
 }
 
 const BUTTON  = ({
     type = 'primary',
-    text = 'Default Button',
+    text = '',
     customStyles = {},
+    customTextStyle = null,
     icon = null,
     isBlock = true,
     ...props
 }) => {
+
+    const textStyle = customTextStyle != null ? customTextStyle : (type == 'secondary' ? 'primary_secondary' : 'white_secondary')
     return(
         <View style={!isBlock ? STYLE.FLEX.LEFT_CENTER_ROW : {}}>
             <Pressable
@@ -37,7 +48,7 @@ const BUTTON  = ({
             >
                 <View style={[styles[type], customStyles]}>
                     {icon != null ? iconlist[icon] : <View />}
-                    {text != null ? <CUSTOM_TEXT text={text} textType="white_secondary" /> : <View /> }
+                    {text != null ? <CUSTOM_TEXT text={text} textType={textStyle} /> : <View /> }
                 </View>
             </Pressable>
         </View>
@@ -51,6 +62,8 @@ const button = {
     borderRadius: STYLE.BORDERRADIUS,
     paddingHorizontal: STYLE.SPACING.default,
     paddingVertical: STYLE.SPACING.s3,
+    borderWidth: STYLE.BORDERWIDTH,
+    borderColor: 'transparent',
     ...STYLE.FLEX.CENTER_ROW
 }
 
@@ -70,6 +83,14 @@ const styles = StyleSheet.create({
     },
     plain: {
         ...button
+    },
+    plain_nopadding: {
+        marginBottom: 0,
+    },
+    outline: {
+        ...button,
+        borderColor: STYLE.COLORS.gray,
+        borderWidth: STYLE.BORDERWIDTH
     }
 })
 
