@@ -8,6 +8,15 @@ import * as STYLE from '@styles/global'
 
 import { CUSTOM_TEXT } from './text'
 
+
+/**
+ * 
+ * refInner - ref - textinput ref
+ * placeholder - string - textinput placeholder
+ * title - string - title for input can be null
+ * isDisabled - bool - make input not editable
+ * textInputStyle - object - additional style
+ */
 export const CUSTOM_INPUT = ({
     refInner = null,
     placeholder='',
@@ -98,7 +107,10 @@ const styles = StyleSheet.create({
         }),
         paddingHorizontal: STYLE.SPACING.default,
         overflow: 'hidden',
-        backgroundColor: STYLE.COLORS.white,
+        borderRadius: STYLE.BORDERRADIUS,
+        borderWidth: STYLE.BORDERWIDTH, 
+        borderColor: STYLE.COLORS.gray,
+        backgroundColor: STYLE.COLORS.gray,
     },
 })
 
