@@ -55,6 +55,9 @@ export const FLEX = StyleSheet.create({
 	"FLEX1": {
 		flex: 1,
 	},
+	"FLEXGROW1": {
+		flexGrow: 1,
+	},
 	"CENTER": {
 		alignItems: 'center',
 		justifyContent: 'center',

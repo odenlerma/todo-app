@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import { View, Text, ScrollView, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 
 // Additional imports
@@ -11,6 +11,9 @@ import { CUSTOM_SUB_HEADER, CUSTOM_INPUT, CUSTOM_BUTTON, CUSTOM_INPUT_DATETIME }
 
 export default () => {
     const navigation = useNavigation()
+    const titleRef = useRef()
+    const descriptionRef = useRef()
+
     return(
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -19,13 +22,18 @@ export default () => {
             <CUSTOM_SUB_HEADER title='Edit' navigation={navigation} />
             <ScrollView
                 keyboardShouldPersistTaps="handled"
+                style={styles.scrollviewheight}
             >
                 <View style={styles.form}>
                     <CUSTOM_INPUT
+                        refInner={titleRef}
                         placeholder='What to do?'
                         title='Task title'
+                        returnKeyType='next'
+                        onSubmitEditing={() => descriptionRef.current.focus()}
                     />
                     <CUSTOM_INPUT
+                        refInner={descriptionRef}
                         placeholder='Describe what you want to do...'
                         title='Task description'
                         multiline={true}
@@ -37,11 +45,7 @@ export default () => {
                     />
                 </View>
                 <CUSTOM_BUTTON
-                    text='Edit Task'
-                />
-                <CUSTOM_BUTTON
-                    text='Cancel Task'
-                    type='gray'
+                    text='+ Add Task'
                 />
             </ScrollView>
             
@@ -57,5 +61,8 @@ const styles = StyleSheet.create({
     },
     form: {
         marginBottom: STYLE.SPACING.s5
+    },
+    scrollviewheight: {
+        height: '100%'
     }
 })

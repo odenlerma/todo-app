@@ -9,33 +9,18 @@ const DATA = [
     {
         id: '1',
         title: 'First Item ahsd ahsda ahsdba hasdga ahsdghasdghasd',
-        description: 'Test description',
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam egestas enim ipsum, non commodo ante cursus eu. Quisque at semper enim, vitae laoreet felis. Mauris fermentum accumsan fringilla. Vestibulum vitae turpis imperdiet, sodales lacus dapibus, eleifend leo. Donec consequat orci a nibh varius elementum. Donec iaculis arcu vel auctor vehicula. In vitae molestie nisl, a dictum diam. Mauris ac quam aliquam, tincidunt velit a, volutpat diam. Fusce sed ligula nisl. Etiam maximus eget dolor sed feugiat. Sed porttitor, ex sed facilisis interdum, sem est elementum neque, non posuere odio justo nec urna. Cras hendrerit viverra nisi ac vulputate. Sed sit amet leo ac tellus pellentesque gravida. Sed euismod arcu vel erat pharetra, eget tempus dui faucibus. Etiam consectetur justo et purus blandit, quis eleifend tellus consectetur. Praesent varius non massa a finibus. Vivamus iaculis eu ligula ut dignissim. Donec rhoncus feugiat est, in porta justo elementum in. Morbi leo elit, porttitor non elit et, aliquam vulputate libero. Duis nec lacus a eros dapibus posuere eu eu elit. Proin sit amet tellus pulvinar urna cursus dictum non a erat. Pellentesque et mi nec augue faucibus imperdiet. Ut at mauris sagittis, condimentum ex id, elementum nunc. Praesent ornare, massa et pellentesque lobortis, mi tellus hendrerit dui, in finibus leo metus eu ligula. Quisque accumsan purus ut eros ornare mattis. Duis non elit eget tellus rhoncus viverra.",
         date: 'May 7, 2024',
-        completed: false,
+        isCompleted: false,
+        isBookmarked: true
     },
     {
         id: '2',
         title: '2nd Item',
         description: 'Test description',
         date: 'May 7, 2024',
-        completed: true,
-    },
-];
-
-const BOOKMARK = [
-    {
-        id: '1',
-        title: 'First Item',
-        description: 'Test description',
-        date: 'May 7, 2024',
-        completed: false,
-    },
-    {
-        id: '2',
-        title: '2nd Item',
-        description: 'Test description',
-        date: 'May 7, 2024',
-        completed: true,
+        isCompleted: true,
+        isBookmarked: false
     },
 ];
 
@@ -110,7 +95,7 @@ export default () => {
             <RENDER_MANAGETASK />
             <FlatList 
                 data={DATA}
-                renderItem={({item}) => <TASK_ITEM item={item} listType={currentTab} />}
+                renderItem={({item}) => <TASK_ITEM navigation={navigation} item={item} listType={currentTab} />}
                 keyExtractor={item => item.id}
                 ListEmptyComponent={<EMPTY_TASK navigation={navigation} />}
             />
@@ -134,15 +119,20 @@ const EMPTY_TASK = ({navigation}) => (
 const PRESSABLE_SIZE = 32;
 const TASK_ITEM = ({
     item, 
-    listType, 
+    listType,
+    navigation, 
     onToggle = () => {}, 
     onBookmark = () =>{}
 }) => {
-    const CHECKBOX = item?.completed ? <COMPONENTS.CUSTOM_SVG_CHECK size={PRESSABLE_SIZE} /> : <COMPONENTS.CUSTOM_SVG_UNCHECKED size={PRESSABLE_SIZE}/>;
-    const BOOKMARK = listType == tabslist[0] ? <COMPONENTS.CUSTOM_SVG_MARKED size={PRESSABLE_SIZE} /> : <COMPONENTS.CUSTOM_SVG_NOTMARKED size={PRESSABLE_SIZE} />
+    const CHECKBOX = item?.isCompleted ? <COMPONENTS.CUSTOM_SVG_CHECK size={PRESSABLE_SIZE} /> : <COMPONENTS.CUSTOM_SVG_UNCHECKED size={PRESSABLE_SIZE}/>;
+    const BOOKMARK = item?.isBookmarked ? <COMPONENTS.CUSTOM_SVG_MARKED size={PRESSABLE_SIZE} /> : <COMPONENTS.CUSTOM_SVG_NOTMARKED size={PRESSABLE_SIZE} />
+
+    const onReadMore = () => {
+        navigation.navigate('ViewTask', {todoItem: item})
+    }
 
     return (
-        <View style={[styles.taskitem.container, listType == tabslist[0] ? styles.taskitem.bookmarkcontainer : styles.taskitem.taskcontainer]}>
+        <View style={[styles.taskitem.container, item?.isBookmarked ? styles.taskitem.bookmarkcontainer : styles.taskitem.taskcontainer]}>
           <View style={styles.taskitem.titlecontainer}>
             <Pressable onPress={onToggle}>
                 {CHECKBOX}
@@ -158,6 +148,7 @@ const TASK_ITEM = ({
                 text='Read more'
                 type='plain_nopadding'
                 customTextStyle='primary_sm'
+                onPress={onReadMore}
             />
             <COMPONENTS.CUSTOM_TEXT text={item.date} textType='gray_sm' numberOfLines={4} />
           </View>
