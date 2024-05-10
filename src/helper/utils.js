@@ -1,46 +1,13 @@
 import { PixelRatio, Dimensions} from 'react-native';
+import moment from 'moment';
 
-const { 
-    width: SCREEN_WIDTH, 
-    height: SCREEN_HEIGHT 
-} = Dimensions.get('window');
+export const dateFormat = 'YYYY-MM-DD';
+export const dateformatdisplay = 'MMMM DD, YYYY'
 
-const widthBaseScale = SCREEN_WIDTH / 414;
-const heightBaseScale = SCREEN_HEIGHT / 896;
-
-export const normalize = (size, based = 'width') => {
-	//let heightBaseScale = getHeightBaseScale() 
-	let newSize = newSize = (based === 'height') ? 
-	size * heightBaseScale : size * widthBaseScale;
-	return Math.round(PixelRatio.roundToNearestPixel(newSize));
+export const convertDate = (date, format = dateformatdisplay) => {
+    if(isEmpty(date)) return '-'
+	return moment(date).format(format);
 }
-
-//for width  pixel
-export const widthPixel = (size) => {
-	return normalize(size, 'width')
-	return size;
-};
-//for height  pixel
-export const heightPixel = (size) => {
-	return normalize(size, 'height');
-};
-
-
-//for font pixel
-export const scalingPixel = (size) => {
-    console.log('scalingPixel ==>', size)
-	return heightPixel(size);
-};
-
-//for Margin and Padding vertical pixel
-export const pixelSizeVertical = (size) => {
-    return heightPixel(size);
-};
-
-//for Margin and Padding horizontal pixel
-export const pixelSizeHorizontal = (size) => {
-    return widthPixel(size);
-};
 
 // IS EMPTY
 export const isEmpty = (data) => {
@@ -49,4 +16,19 @@ export const isEmpty = (data) => {
     }
  
     return true // empty
+}
+
+export const randomID = () => {
+    const timestamp = Date.now().toString(36); // Convert current timestamp to base36 string
+    const randomNum = Math.random().toString(36).substr(2, 5); // Generate random string
+    return `${timestamp}-${randomNum}`;
+}
+
+export const sort = (arr, type, param) => {
+    let newArr = [...arr]
+    if(type == 'asc'){
+        return newArr.sort((a, b) => a[param].localeCompare(b[param]));
+    }else if(type == 'desc'){
+        return newArr.sort((a, b) => b[param].localeCompare(a[param]));
+    }
 }
