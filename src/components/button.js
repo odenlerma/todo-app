@@ -81,6 +81,10 @@ const styles = StyleSheet.create({
         ...button,
         backgroundColor: STYLE.COLORS.gray
     },
+    danger: {
+        ...button,
+        backgroundColor: STYLE.COLORS.danger
+    },
     plain: {
         ...button
     },
