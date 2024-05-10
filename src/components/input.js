@@ -43,6 +43,7 @@ export const CUSTOM_INPUT = ({
                         autoCompleteType='off'
                         autoCorrect={false}
                         autoCapitalize='none'
+                        defaultValue={defaultValue}
                         ref={refInner != null ? refInner : inputRef}
                         placeholder={placeholder || title || ''}
                         placeholderTextColor={STYLE.COLORS.gray}
