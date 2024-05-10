@@ -147,7 +147,8 @@ Click [here](https://reactnative.dev/docs/publishing-to-app-store) ror additiona
 
 ## React Native MMKV
 Repo: [Link](https://github.com/mrousavy/react-native-mmkv)
-This was used as storage for the tasks. This was used due to because it is deemed to faster than AsyncStorage for local storage of data.
+
+This was used as storage for the tasks. This was used because it is deemed to be faster than AsyncStorage for local storage of data.
 
 Supporting Articles: [Link1](https://blog.logrocket.com/using-react-native-mmkv-improve-app-performance/) [Link2](https://medium.com/@barisberkemalkoc/react-native-mmkv-library-fcc11a0b7628)
 
@@ -175,7 +176,7 @@ This was used for modal type picker for date.
 ## React Native Modal
 Repo: [Link](https://github.com/react-native-modal/react-native-modal)
 
-This was used for root modal type and is more easier to use than build in modal of React Native
+This was used for root modal type and is more easier to use than built in modal of React Native
 
 ## React SVG and React Native Lottie
 Repo: [SVG](https://github.com/software-mansion/react-native-svg) [Lottie](https://github.com/lottie-react-native/lottie-react-native)
