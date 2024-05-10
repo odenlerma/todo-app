@@ -188,7 +188,7 @@ Website: [Link](https://reactnavigation.org/)
 This was used for routing screens and passing parameters from one screen to another
 
 # Contributing
-Looking to contribute something to Minimal? [Here's how you can help](/Contributing.md).
+Looking to contribute something to TODO? [Here's how you can help](/Contributing.md).
 
 
 # License:
