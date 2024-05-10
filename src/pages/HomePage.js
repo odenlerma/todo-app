@@ -13,7 +13,7 @@ import * as COMPONENTS from '@components'
 import { ACTION_MODAL_SHOWHIDE, ACTION_BULK_DELETE_TASK, ACTION_BOOKMARK_TASK, ACTION_COMPLETE_TASK } from '@custom-redux/slice'
 const AnimatedFlatlist = Animatable.createAnimatableComponent(FlatList);
 
-const tabslist = ['Bookmarks', 'Tasks']
+const tabslist = ['Tasks','Bookmarks']
 
 export default () => {
     const navigation = useNavigation()
@@ -36,17 +36,13 @@ export default () => {
 
     const [bookmarkList, setBookmarkList] = useState([])
     const [tasksList, setTasksList] = useState([])
-    const [mainList, setMainList] = useState(tasks) // contain updated full or filtered list
 
     // for bulk delete
     const [toggleBulkDelete, setToggleBulkDelete] = useState(false)
     const [bulkDeleteList, setBulkDeleteList] = useState([])
 
     useEffect(() => {
-        sortList(tasks);
-
-        // set new tasks as mainlist
-        setMainList(tasks)
+        sortList();
     }, [tasks])
 
     useEffect(() => {
@@ -54,29 +50,33 @@ export default () => {
         sortList();
     }, [azToggle])
 
-    const sortList = (list = mainList) => {
+    const sortList = (search = searchText) => {
+        let list = tasks;
+
+        // search by title
+        if(!UTILS.isEmpty(search)){
+            list = list.filter((task) => task.title.includes(search))
+        }
+
         // if alphabetically arranged
         if(azToggle == 1){
             list = UTILS.sort(list, 'asc', 'title');
         }else if(azToggle == 2){
             list = UTILS.sort(list, 'desc', 'title')
         }
-
+        
         // separate bookmark to tasks
         let bklist = []
-        let tlist = []
 
         for(let key in list){
             if(list[key].isBookmarked){
                 bklist.push(list[key])
-            }else{
-                tlist.push(list[key])
             }
         }
 
         // list for bookmark and taskslist
         setBookmarkList(bklist)
-        setTasksList(tlist)
+        setTasksList(list)
     }
 
     const changeTab = useCallback((tab) => {
@@ -105,14 +105,23 @@ export default () => {
     },[azToggle])
 
     const onSearchToggle = useCallback(() => {
-        setSearchToggle(prev => !prev)
-
-        if(!UTILS.isEmpty(searchText)){
+        if(searchToggle){
             setSearchText('') // clear search input
-            sortList(tasks) // reset lists
-            setMainList(tasks) // reset to full list
+            startTransition(() => {
+                sortList('')
+            })
         }
+
+        setSearchToggle(prev => !prev)
     },[searchToggle])
+
+    const onChangeSearch = useCallback((e) => {
+        setSearchText(e)
+        startTransition(() => {
+            sortList(e)
+        })
+    }, [searchText])
+
 
     const onTaskCheck = useCallback((id) => {
         // check/uncheck task
@@ -123,20 +132,6 @@ export default () => {
         // bookmark task
         dispatch(ACTION_BOOKMARK_TASK(id))
     }, [tasks])
-
-    const onChangeSearch = useCallback((e) => {
-        setSearchText(e)
-        startTransition(() => {
-            if(!UTILS.isEmpty(e)){ // filter if input is not empty
-                let filteredlist = tasks.filter((task) => task.title.includes(e))
-                sortList(filteredlist)
-                setMainList(filteredlist)
-            }else{ // reset to full list if empty
-                sortList(tasks)
-                setMainList(tasks)
-            }
-        })
-    }, [searchText])
 
     // Saving array of id's for bulk delete
     const onToBulkDelete = (id, bool) => {
@@ -331,7 +326,7 @@ const TASK_ITEM = ({
             <COMPONENTS.CUSTOM_TEXT text={item.description} textType={settings.descTextType} numberOfLines={4} />
             <View style={styles.taskitem.cardfooter}>
                 <COMPONENTS.CUSTOM_BUTTON
-                    text='Read more'
+                    text='View Task'
                     type='plain_nopadding'
                     customTextStyle='primary_sm'
                     onPress={onReadMore}
@@ -367,7 +362,8 @@ const styles = StyleSheet.create({
         },
         title: {
             flex: 1,
-            marginHorizontal: STYLE.SPACING.s3
+            marginHorizontal: STYLE.SPACING.s3,
+            fontWeight: STYLE.FONTWEIGHT
         },
         titlecontainer: {
             ...STYLE.FLEX.ENDTOEND_ROW,

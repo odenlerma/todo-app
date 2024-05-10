@@ -26,9 +26,21 @@ export const randomID = () => {
 
 export const sort = (arr, type, param) => {
     let newArr = [...arr]
+    let sortedArray = newArr.sort((a, b) => {
+        let fa = a[param].toLowerCase(),
+            fb = b[param].toLowerCase();
+    
+        if (fa < fb) {
+            return -1;
+        }
+        if (fa > fb) {
+            return 1;
+        }
+        return 0;
+    });
     if(type == 'asc'){
-        return newArr.sort((a, b) => a[param].localeCompare(b[param]));
+        return sortedArray
     }else if(type == 'desc'){
-        return newArr.sort((a, b) => b[param].localeCompare(a[param]));
+        return sortedArray.reverse()
     }
 }

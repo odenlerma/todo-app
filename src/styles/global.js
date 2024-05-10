@@ -8,6 +8,7 @@ export const ANIMATIONMS = 300;
 
 export const BORDERRADIUS = 12;
 export const BORDERWIDTH = 2;
+export const FONTWEIGHT = '500';
 
 export const COLORS = {
 	default_background: '#FAFFFE',
