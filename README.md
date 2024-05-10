@@ -52,14 +52,14 @@ If everything is set up _correctly_, you should see your new app running in your
 If you have encountered JDK issue, this is the workaround steps you can use.
 
 1. Open Android Studio and open your project android folder.
-2. Go to *File > Settings > Build, Execution, Deployment > Build Tools > Gradle* and change Gradle JDK to **Embedded JDK JetBrains Runtime version 17.0.6**
+2. Go to *File > Settings > Build, Execution, Deployment > Build Tools > Gradle* and change Gradle JDK to **Embedded JDK JetBrains Runtime version 17.0.6** . 
+Note the path of embedded JDK.
 
 # ![Use Embedded JDK 17](src/assets/png/fix-jdk17error.png)
 
-Note the path of embedded JDK.
 3. Click "OK"
 
-4. Then we need to add gradle in our project. Go to *android/gradle.properties* and add the following line.
+4. Then we need to add the following line in our project. Go to *android/gradle.properties*
 
 ```
  org.gradle.java.home={path-to-your-Embedded-JDK}
@@ -77,6 +77,7 @@ Follow the following steps for Publishing to Google Playstore
 First we need to generate upload key and copy it to our project *android/app* directory. Follow the steps below on how to generate upload key.
 
 **For Windows**
+
 Open terminal and go to your jdk directory (eg. C:\Program Files\Java\jdkx.x.x_x\bin) and run the keytool below. Ensure replace *my-upload-key* and *my-key-alias* variable from keytool snippet
 
 ```bash
@@ -84,6 +85,7 @@ keytool -genkeypair -v -storetype PKCS12 -keystore my-upload-key.keystore -alias
 ```
 
 **For macOS**
+
 Open terminal and locate JDK bin folder by running
 ```bash
 /usr/libexec/java_home
@@ -104,7 +106,7 @@ KEY_ALIAS=my-key-alias
 STORE_PASSWORD=******
 KEY_PASSWORD=*****
 ```
-Save changes.
+3. Save changes.
 
 ### Step 3: Generate AAB
 Run the following command:
@@ -129,7 +131,7 @@ Follow the following steps for Publishing to Apple App Store
 ### Build app for release
 1. Open .xcworkspace of you project in XCode.
 2. Setup signing configurations. You will need an Apple Developer account here. Click [here](https://developer.apple.com/documentation/xcode/distributing-your-app-to-registered-devices) for additional guides.
-3. Click *Product > Archive*. . Make sure to set the device to "Any iOS Device (arm64)".
+3. Click *Product > Archive* . Make sure to set the device to "Any iOS Device (arm64)".
 4. After the archive is completed, in the archive window, click on Distribute App.
 5. Click on App Store Connect now (if you want to publish in App Store).
 6. Click Upload → Make sure all the check boxes are selected, hit Next.
@@ -152,28 +154,35 @@ Supporting Articles: [Link1](https://blog.logrocket.com/using-react-native-mmkv-
 
 ## Redux Toolkit
 Website: [Link](https://redux-toolkit.js.org/)
+
 This was used because it simplifies state management, reduces Redux boilerplate,  supports async logic, and is officially supported by the Redux team. Since *createStore* was depreciated in Redux and it was suggested to use this instead.
 
 ## Redux Saga
 Website: [Link](https://redux-saga.js.org/)
+
 This was used because it will provide a middleware solution for managing side effects, such as asynchronous operations, in Redux applications.
 
 ## React Native Animatable
 Repo: [Link](https://github.com/oblador/react-native-animatable)
+
 This was used for a ready-made and easy to use animation.
 
 ## React Native Date Picker
 Repo: [Link](https://github.com/henninghall/react-native-date-picker)
+
 This was used for modal type picker for date.
 
 ## React Native Modal
 Repo: [Link](https://github.com/react-native-modal/react-native-modal)
+
 This was used for root modal type and is more easier to use than build in modal of React Native
 
 ## React SVG and React Native Lottie
 Repo: [SVG](https://github.com/software-mansion/react-native-svg) [Lottie](https://github.com/lottie-react-native/lottie-react-native)
+
 This was used for customized icons within the app to match app aesthetics.
 
 ## React Navigation
 Website: [Link](https://reactnavigation.org/)
+
 This was used for routing screens and passing parameters from one screen to another
