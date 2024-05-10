@@ -1,49 +1,57 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { Pressable, Keyboard } from 'react-native';
 
 // Additional modules
 import DatePicker from 'react-native-date-picker'
-import { Pressable, View } from 'react-native';
 
 // Custom imports
-import * as STYLE from '@styles/global';
 import * as UTILS from '@helper/utils'
 import { CUSTOM_INPUT } from './input';
 
+
+/**
+ * value - Date obj - value for date
+ * title - string - input title
+ * setValue - function - set new value
+ */
 export const CUSTOM_INPUT_DATETIME = ({
-    defaultValue = new Date(),
-    changeDateTime = () => {},
-    mode = 'date',
+    value = null,
     title = 'Select Date',
+    setValue = () => {},
 }) => {
-    const [date, setDate] = useState(null)
-    const [isOpenPicker, setisOpenPicker] = useState(false)
+    const [open, setOpen] = useState(false);
+    const [storeDef, setStoreDef] = useState(value);
 
-    const showPickerModal = () => {
-        setisOpenPicker(!isOpenPicker)
-    }
-
-    const changeDate = () => {
-
-    }
-
-    const PICKER = () => (
-        <DatePicker
-            textColor={STYLE.COLORS.black}
-            date={!UTILS.isEmpty(date) ? date : new Date()}
-            onDateChange={changeDate}
-            mode={mode}
-            androidVariant='nativeAndroid'
-        />
-    )
+    const showPickerModal = useCallback(() => {
+        Keyboard.dismiss()
+        setOpen(!open)
+    }, [open])
 
     return(
-        <Pressable onPress={showPickerModal}>
-            <CUSTOM_INPUT
-                isDisabled={true}
-                defaultValue={date}
-                placeholder='MMMM DD, YYYY'
+        <>
+            <Pressable onPress={showPickerModal}>
+                <CUSTOM_INPUT
+                    isDisabled={true}
+                    defaultValue={UTILS.convertDate(value)}
+                    value={UTILS.convertDate(value)}
+                    placeholder='YYYY-MM-DD'
+                    title={title}
+                />
+            </Pressable>
+            <DatePicker
+                modal
+                open={open}
+                mode='date'
+                date={value}
+                onConfirm={(date) => {
+                    setOpen(false)
+                    setValue(date)
+                }}
+                onCancel={() => {
+                    setOpen(false)
+                    setValue(storeDef)
+                }}
             />
-            {isOpenPicker ? <PICKER/> : <View />}
-        </Pressable>
+        </>
     )
 }
