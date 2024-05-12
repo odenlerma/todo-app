@@ -6,12 +6,12 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 
-
 // Custom imports
 import * as STYLE from '@styles/global';
 import * as UTILS from '@helper/utils'
 import * as COMPONENTS from '@components';
 import { ACTION_MODAL_SHOWHIDE, ACTION_DELETE_TASK, ACTION_BOOKMARK_TASK, ACTION_COMPLETE_TASK } from '@custom-redux/slice'
+import { CUSTOM_LOADER } from '../components/loader';
 
 
 const item = {
@@ -22,7 +22,7 @@ const item = {
 export default () => {
     const dispatch = useDispatch()
     const navigation = useNavigation()
-    const tasks = useSelector((state) => state.tasks);
+    const { tasks, isLoading } = useSelector((state) => state.tasks);
     const routes = useRoute()
     const { params } = routes;
     const [taskItem, setTaskItem] = useState(params?.todoItem)
@@ -43,7 +43,7 @@ export default () => {
                     <COMPONENTS.CUSTOM_TEXT text={taskItem?.description} numberOfLines={0} />
                 </ScrollView>
             </View>
-            <FOOTER_TOOLS dispatch={dispatch} todoItem={taskItem} navigation={navigation}/>
+            <FOOTER_TOOLS dispatch={dispatch} isLoading={isLoading} todoItem={taskItem} navigation={navigation}/>
         </View>
     )
 }
@@ -52,7 +52,8 @@ const PRESSABLE_SIZE = 32;
 const FOOTER_TOOLS = ({
     todoItem,
     navigation,
-    dispatch
+    dispatch,
+    isLoading
 }) => {
     const CHECKBOX = todoItem?.isCompleted ? <COMPONENTS.CUSTOM_SVG_CHECK size={PRESSABLE_SIZE} /> : <COMPONENTS.CUSTOM_SVG_UNCHECKED size={PRESSABLE_SIZE}/>;
     const BOOKMARK = todoItem?.isBookmarked ? <COMPONENTS.CUSTOM_SVG_MARKED size={PRESSABLE_SIZE} /> : <COMPONENTS.CUSTOM_SVG_NOTMARKED size={PRESSABLE_SIZE} />
@@ -92,18 +93,22 @@ const FOOTER_TOOLS = ({
 
     return(
         <View style={styles.footercontent.container}>
-            <Pressable onPress={onTaskCheck} style={styles.footercontent.pressable} >
-                {CHECKBOX}
-            </Pressable>
-            <Pressable onPress={onTaskBookmark} style={styles.footercontent.pressable}>
-                {BOOKMARK}
-            </Pressable>
-            <Pressable onPress={onPressEdit} style={styles.footercontent.pressable}>
-                <COMPONENTS.CUSTOM_SVG_EDIT size={PRESSABLE_SIZE}/>
-            </Pressable>
-            <Pressable onPress={onTaskDelete}>
-                <COMPONENTS.CUSTOM_SVG_DELETE size={PRESSABLE_SIZE}/>
-            </Pressable>
+            {isLoading ? <CUSTOM_LOADER /> : (
+                <>
+                    <Pressable onPress={onTaskCheck} style={styles.footercontent.pressable} >
+                        {CHECKBOX}
+                    </Pressable>
+                    <Pressable onPress={onTaskBookmark} style={styles.footercontent.pressable}>
+                        {BOOKMARK}
+                    </Pressable>
+                    <Pressable onPress={onPressEdit} style={styles.footercontent.pressable}>
+                        <COMPONENTS.CUSTOM_SVG_EDIT size={PRESSABLE_SIZE}/>
+                    </Pressable>
+                    <Pressable onPress={onTaskDelete}>
+                        <COMPONENTS.CUSTOM_SVG_DELETE size={PRESSABLE_SIZE}/>
+                    </Pressable>
+                </>
+            )}
         </View>
     )
 }

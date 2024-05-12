@@ -3,7 +3,7 @@ import { View, Text, ScrollView, KeyboardAvoidingView, Platform, StyleSheet } fr
 
 // Additional imports
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Custom imports
 import * as STYLE from '@styles/global';
@@ -17,6 +17,7 @@ export default () => {
     const navigation = useNavigation()
     const titleRef = useRef()
     const descriptionRef = useRef()
+    const { isLoading, error } = useSelector((state) => state.tasks)
 
     const [title, setTitle] = useState('')
     const [description, setdescription] = useState('')
@@ -59,8 +60,14 @@ export default () => {
             isCompleted: false,
         }))
 
-        showMessageModal('Task successfully added!', 'success')
-        navigation.goBack();
+        if(!isLoading){
+            if(error){
+                showMessageModal('An error has occured. Please try again later', 'warning')
+            }else{
+                showMessageModal('Task successfully added!', 'success')
+                navigation.goBack();
+            }
+        }
     }
 
     const onChangeTitle = useCallback((e) => {
@@ -106,7 +113,9 @@ export default () => {
                     />
                 </View>
             </ScrollView>
+
             <CUSTOM_BUTTON
+                showLoader={isLoading}
                 text='+ Add Task'
                 onPress={onPressAddTask}
                 customStyles={styles.btn}

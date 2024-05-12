@@ -1,55 +1,103 @@
-import { takeEvery, put, call } from 'redux-saga/effects';
-
-import { ACTION_BULK_DELETE_TASK, ACTION_DELETE_TASK, ACTION_ADD_TASK, ACTION_EDIT_TASK, ACTION_COMPLETE_TASK, ACTION_BOOKMARK_TASK } from '../slice'
-
-import * as CONSTANTS from '../constants';
+import { takeEvery, put, call, select, delay } from 'redux-saga/effects';
+import { mmkv } from '@custom-redux/store';
+import { ACTION_BOOKMARK_TASK_SUCCESS, ACTION_COMPLETE_TASK_SUCCESS, ACTION_EDIT_TASK_SUCCESS, ACTION_BULK_DELETE_TASK_SUCCESS, ACTION_DELETE_TASK_SUCCESS, ACTION_FAIL, ACTION_ADD_TASK_SUCCESS } from '../slice'
 
 function* addTask(action) {
-  yield delay(1000);
-  yield put(ACTION_ADD_TASK(action.payload));
-}
-
-function* editTask(action) {
-  yield delay(1000);
-  yield put(ACTION_EDIT_TASK(action.payload));
-}
-
-function* removeTask(action) {
-  yield delay(1000);
-  yield put(ACTION_DELETE_TASK(action.payload));
-}
-
-function* removeBulkTask(action) {
-  yield delay(1000);
-  yield put(ACTION_BULK_DELETE_TASK(action.payload));
-}
-
-function* toggleCheck(action) {
-  yield delay(1000);
-  yield put(ACTION_COMPLETE_TASK(action.payload));
-}
-
-function* toggleBookmark(action) {
-  yield delay(1000);
-  yield put(ACTION_BOOKMARK_TASK(action.payload));
-}
-
-
-function* showhideModal({ payload }) {
-  if (payload.visible) {
-    yield put({ type: CONSTANTS.MODAL_VISIBLE, payload: payload });
-  } else {
-    yield put({ type: CONSTANTS.MODAL_VISIBLE, payload: {visible: false, params: [], modalType: ''} });
+  const state = yield select((state) => state.tasks);
+  try{
+    let list = [...state.tasks]
+    list.push(action.payload);
+    yield mmkv.set('storeTasks', JSON.stringify(list));
+    yield put(ACTION_ADD_TASK_SUCCESS(list))
+  }catch(err){
+    if(__DEV__) console.log("addTask ==> ", err)
+    ACTION_FAIL()
   }
 }
 
-export default function* ROOTSAGA() {
-    yield takeEvery(CONSTANTS.MODAL_VISIBLE, showhideModal);
+function* removeTask(action) {
+  const state = yield select((state) => state.tasks);
+  try{
+    let list =  yield state.tasks.filter((task) => task.id !== action.payload);
+    yield mmkv.set('storeTasks', JSON.stringify(list));
+    yield put(ACTION_DELETE_TASK_SUCCESS(list))
+  }catch(err){
+    if(__DEV__) console.log("removeTask ==> " ,err)
+    ACTION_FAIL()
+  }
+}
 
-    yield takeEvery(CONSTANTS.TASK_ADD_TASK, addTask);
-    yield takeEvery(CONSTANTS.TASK_EDIT_TASK, editTask);
-    yield takeEvery(CONSTANTS.TASK_REMOVE_TASK, removeTask);
-    yield takeEvery(CONSTANTS.TASK_BULK_REMOVE_TASK, removeBulkTask);
-    yield takeEvery(CONSTANTS.TASK_TOGGLE_BOOKMARK, toggleBookmark);
-    yield takeEvery(CONSTANTS.TASK_TOGGLE_CHECK, toggleCheck);
+function* removeBulkTask(action) {
+  const state = yield select((state) => state.tasks);
+  try{
+    let list =  yield state.tasks.filter(todo => !action.payload.includes(todo.id));
+    yield mmkv.set('storeTasks', JSON.stringify(list));
+    yield put(ACTION_BULK_DELETE_TASK_SUCCESS(list))
+  }catch(err){
+    if(__DEV__) console.log("removeBulkTask ==> " ,err)
+    ACTION_FAIL()
+  }
+}
+
+function* editTask(action) {
+  const state = yield select((state) => state.tasks);
+  try{
+    let list =  yield state.tasks.map(todo => todo.id === action.payload.id ? action.payload : todo);
+    yield mmkv.set('storeTasks', JSON.stringify(list));
+    yield put(ACTION_EDIT_TASK_SUCCESS(list))
+  }catch(err){
+    if(__DEV__) console.log("editTask ==> " ,err)
+    ACTION_FAIL()
+  }
+}
+
+
+function* toggleCheck(action) {
+  const state = yield select((state) => state.tasks);
+  try{
+    const list = state.tasks.map(task => {
+      if (task.id === action.payload) {
+        return {
+          ...task,
+          isCompleted: !task.isCompleted 
+        };
+      }
+      return task;
+    });
+    yield mmkv.set('storeTasks', JSON.stringify(list));
+    yield put(ACTION_COMPLETE_TASK_SUCCESS(list))
+  }catch(err){
+    if(__DEV__) console.log("toggleCheck ==> " ,err)
+    ACTION_FAIL()
+  }
+}
+
+function* toggleBookmark(action) {
+  const state = yield select((state) => state.tasks);
+  try{
+    const list = state.tasks.map(task => {
+      if (task.id === action.payload) {
+        return {
+          ...task,
+          isBookmarked: !task.isBookmarked 
+        };
+      }
+      return task;
+    });
+    yield mmkv.set('storeTasks', JSON.stringify(list));
+    yield put(ACTION_BOOKMARK_TASK_SUCCESS(list))
+  }catch(err){
+    if(__DEV__) console.log("toggleBookmark ==> " ,err)
+    ACTION_FAIL()
+  }
+}
+
+
+export default function* ROOTSAGA() {
+    yield takeEvery('taskList/ACTION_ADD_TASK', addTask);
+    yield takeEvery('taskList/ACTION_DELETE_TASK', removeTask);
+    yield takeEvery('taskList/ACTION_BULK_DELETE_TASK', removeBulkTask);
+    yield takeEvery('taskList/ACTION_EDIT_TASK', editTask);
+    yield takeEvery('taskList/ACTION_BOOKMARK_TASK', toggleBookmark);
+    yield takeEvery('taskList/ACTION_COMPLETE_TASK', toggleCheck);
 }   

@@ -12,9 +12,14 @@ export const mmkv = new MMKV();
 const sagaMiddleware = createSagaMiddleware();
 
 const getTaskList = () => {
-  let tasklist = mmkv.getString('taskList')
-  if(UTILS.isEmpty(tasklist)) return {}
-  return {tasks: JSON.parse(tasklist)}
+  let tasklist = mmkv.getString('storeTasks');
+
+  if(UTILS.isEmpty(tasklist)){ // tasks reducer is empty
+    mmkv.set('storeTasks', '[]'); // set initial store
+    return {tasks: {tasks: []}} // set initial reducer
+  }
+
+  return {tasks: {tasks: JSON.parse(tasklist)}}
 }
 
 export const store = configureStore({
@@ -25,12 +30,5 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}).concat(sagaMiddleware),
   preloadedState: getTaskList(),
 });
-
-// store.subscribe(() => {
-//   const current = store.getState();
-//   if(!UTILS.isEmpty(current.tasks)){
-//       mmkv.set('taskList', JSON.stringify(store.getState().tasks));
-//   }
-// });
 
 sagaMiddleware.run(ROOTSAGA);

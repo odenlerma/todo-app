@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState, useRef, useTransition } from 'react';
+import React, {useCallback, useEffect, useState, useRef, useTransition, useMemo } from 'react';
 import { View, FlatList, Text, StyleSheet, Pressable } from 'react-native';
 
 // additional modules
@@ -19,10 +19,10 @@ export default () => {
     const navigation = useNavigation()
     const dispatch = useDispatch();
     const flatlistRef = useRef()
-    const tasks = useSelector((state) => state.tasks);
+    const { tasks, isLoading }= useSelector((state) => state.tasks);
 
     // for bookmark or tasks tab
-    const [currentTab, setCurrentTab] = useState('Bookmarks')
+    const [currentTab, setCurrentTab] = useState('Tasks')
 
     // for sort alphabetically
     // 0 = unsort, 1 = asc sort, 2 = desc sort
@@ -51,32 +51,34 @@ export default () => {
     }, [azToggle])
 
     const sortList = (search = searchText) => {
-        let list = tasks;
+        startTransition(() => {
+            let list = tasks;
 
-        // search by title
-        if(!UTILS.isEmpty(search)){
-            list = list.filter((task) => task.title.includes(search))
-        }
-
-        // if alphabetically arranged
-        if(azToggle == 1){
-            list = UTILS.sort(list, 'asc', 'title');
-        }else if(azToggle == 2){
-            list = UTILS.sort(list, 'desc', 'title')
-        }
-        
-        // separate bookmark to tasks
-        let bklist = []
-
-        for(let key in list){
-            if(list[key].isBookmarked){
-                bklist.push(list[key])
+            // search by title
+            if(!UTILS.isEmpty(search)){
+                list = list.filter((task) => task.title.toLowerCase().includes(search.toLowerCase()))
             }
-        }
 
-        // list for bookmark and taskslist
-        setBookmarkList(bklist)
-        setTasksList(list)
+            // if alphabetically arranged
+            if(azToggle == 1){
+                list = UTILS.sort(list, 'asc', 'title');
+            }else if(azToggle == 2){
+                list = UTILS.sort(list, 'desc', 'title')
+            }
+            
+            // separate bookmark to tasks
+            let bklist = []
+
+            for(let key in list){
+                if(list[key].isBookmarked){
+                    bklist.push(list[key])
+                }
+            }
+
+            // list for bookmark and taskslist
+            setBookmarkList(bklist)
+            setTasksList(list)
+        })
     }
 
     const changeTab = useCallback((tab) => {
@@ -107,9 +109,7 @@ export default () => {
     const onSearchToggle = useCallback(() => {
         if(searchToggle){
             setSearchText('') // clear search input
-            startTransition(() => {
-                sortList('')
-            })
+            sortList('')
         }
 
         setSearchToggle(prev => !prev)
@@ -117,9 +117,7 @@ export default () => {
 
     const onChangeSearch = useCallback((e) => {
         setSearchText(e)
-        startTransition(() => {
-            sortList(e)
-        })
+        sortList(e)
     }, [searchText])
 
 
@@ -180,6 +178,7 @@ export default () => {
 
     const processBulkDelete = async () => {
         await dispatch(ACTION_BULK_DELETE_TASK(bulkDeleteList))
+        setToggleBulkDelete(false)
         setBulkDeleteList([])
     }
 
@@ -190,18 +189,22 @@ export default () => {
             <COMPONENTS.CUSTOM_MAIN_HEADER navigation={navigation} />
             <View>
                 {toggleBulkDelete ? (
-                    <View style={STYLE.FLEX.RIGHT_CENTER_ROW}>
-                        <COMPONENTS.CUSTOM_BUTTON
-                            type='plain'
-                            icon='delete'
-                            onPress={onBulkDelete}
-                        />
-                         <COMPONENTS.CUSTOM_BUTTON
-                            type='plain'
-                            icon='close'
-                            onPress={onToggleBulkDelete}
-                        />
-                    </View>
+                    <>
+                    {isLoading ? <COMPONENTS.CUSTOM_LOADER /> : (
+                        <View style={STYLE.FLEX.RIGHT_CENTER_ROW}>
+                            <COMPONENTS.CUSTOM_BUTTON
+                                type='plain'
+                                icon='delete'
+                                onPress={onBulkDelete}
+                            />
+                            <COMPONENTS.CUSTOM_BUTTON
+                                type='plain'
+                                icon='close'
+                                onPress={onToggleBulkDelete}
+                            />
+                        </View>
+                    )}
+                    </>
                 ) : (
                     <>
                         <View style={styles.toolbarcontainer}>
@@ -254,6 +257,7 @@ export default () => {
                             sendToDelete={onToBulkDelete}
                             showDelete={toggleBulkDelete}
                             bulkDeleteList={bulkDeleteList}
+                            isLoading={isLoading}
                         />)}
                     keyExtractor={item => item.id}
                     ListEmptyComponent={<EMPTY_TASK navigation={navigation} />}
@@ -286,6 +290,7 @@ const TASK_ITEM = ({
     sendToDelete = () => {},
     showDelete = false,
     bulkDeleteList = [],
+    isLoading = false,
 }) => {
     const toDelete = bulkDeleteList.includes(item?.id)
 
@@ -316,11 +321,11 @@ const TASK_ITEM = ({
             <Pressable onLongPress={onLongPress} style={[styles.taskitem.container, settings.container, settings.containerCompleted]}>
             <View style={styles.taskitem.titlecontainer}>
                 <Pressable onPress={() => onToggle(item.id)}>
-                    {settings.CHECKBOX}
+                    {isLoading ? <COMPONENTS.CUSTOM_LOADER /> : settings.CHECKBOX}
                 </Pressable>
                 <COMPONENTS.CUSTOM_TEXT text={item.title} textType={settings.titleTextType} customStyles={styles.taskitem.title} />
                 <Pressable onPress={() => onBookmark(item.id)}>
-                    {settings.BOOKMARK}
+                    {isLoading ? <COMPONENTS.CUSTOM_LOADER /> : settings.BOOKMARK}
                 </Pressable>
             </View>
             <COMPONENTS.CUSTOM_TEXT text={item.description} textType={settings.descTextType} numberOfLines={4} />
