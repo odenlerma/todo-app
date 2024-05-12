@@ -1,6 +1,6 @@
 # ![TODO](src/assets/svg/TODO%20logo.png)
 
-This a simple task app that runs Android/IOS. It can add, edit, delete, bookmark and mark as complete tasks. This is made with React Native frameworks and uses MMKV as storage and Redux toolkit with Redux Saga as state management.
+This a simple task app that runs Android/IOS. It can add, edit, delete, bookmark and mark as complete tasks. This is made with React Native frameworks and uses MMKV as storage and Redux toolkit as state management.
 
 The app prototype was first made using Figma before it undergo development. This ensure smoother development process and avoid redesigning while coding.
 # ![TODO Figma Design](src/assets/png/figma-design.PNG)
@@ -157,11 +157,6 @@ Supporting Articles: [Link1](https://blog.logrocket.com/using-react-native-mmkv-
 Website: [Link](https://redux-toolkit.js.org/)
 
 This was used because it simplifies state management, reduces Redux boilerplate,  supports async logic, and is officially supported by the Redux team. Since *createStore* was depreciated in Redux and it was suggested to use this instead.
-
-## Redux Saga
-Website: [Link](https://redux-saga.js.org/)
-
-This was used because it will provide a middleware solution for managing side effects, such as asynchronous operations, in Redux applications.
 
 ## React Native Animatable
 Repo: [Link](https://github.com/oblador/react-native-animatable)
