@@ -11,7 +11,7 @@ import AddTask from '@pages/AddTask';
 import ViewTask from '@pages/ViewTask';
 import EditTask from '@pages/EditTask';
 
-import { ACTION_MODAL_SHOWHIDE } from '@custom-redux/slice';
+import { ACTION_MODAL_SHOWHIDE, ACTION_ACKNOWLEDGE_ERROR } from '@custom-redux/slice';
 
 const headlessScreenOptions = {
     headerMode: 'none',
@@ -43,11 +43,16 @@ export default () => {
             modalType: 'messageModal',
             params: {
                 message: 'An error has occured',
-                contentType: 'error'
+                contentType: 'error',
+                customOnClose: () => acknowledgeClose(),
             }
           }))
         }
     }, [error])
+
+    const acknowledgeClose = () => {
+      dispatch(ACTION_ACKNOWLEDGE_ERROR())
+    }
 
     
     useEffect(() => {

@@ -26,6 +26,9 @@ export function CUSTOM_MESSAGE_MODAL({modalReducer}){
 
 
     const closeModal = () => {
+        if(modalReducer?.params?.customOnClose){
+            modalReducer?.params?.customOnClose()
+        }
         dispatch(ACTION_MODAL_SHOWHIDE({visible: false}))
     }
 
