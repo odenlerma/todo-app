@@ -3,7 +3,7 @@ import { View, Text, ScrollView, KeyboardAvoidingView, Platform, StyleSheet } fr
 
 // Additional imports
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Custom imports
 import * as STYLE from '@styles/global';
@@ -19,6 +19,7 @@ export default () => {
     const { params } = routes;
     const titleRef = useRef()
     const descriptionRef = useRef()
+    const { isLoading } = useSelector((state) => state.tasks)
 
     const [title, setTitle] = useState(params?.todoItem?.title)
     const [description, setdescription] = useState(params?.todoItem?.description)
@@ -112,6 +113,7 @@ export default () => {
                 
             </ScrollView>
             <CUSTOM_BUTTON
+                showLoader={isLoading}
                 text='Edit Task'
                 onPress={onPressEditTask}
                 customStyles={styles.btn}

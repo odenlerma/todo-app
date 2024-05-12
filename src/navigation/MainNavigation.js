@@ -2,15 +2,16 @@ import React, { useEffect } from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Custom imports
+import { mmkv } from '@custom-redux/store';
 import HomePage from '@pages/HomePage';
 import AddTask from '@pages/AddTask';
 import ViewTask from '@pages/ViewTask';
 import EditTask from '@pages/EditTask';
 
-import { mmkv } from '@custom-redux/store';
-import { useSelector } from 'react-redux';
+import { ACTION_MODAL_SHOWHIDE } from '@custom-redux/slice';
 
 const headlessScreenOptions = {
     headerMode: 'none',
@@ -31,11 +32,35 @@ const MAIN_STACK_NAVIGATOR = () => (
 )
 
 export default () => {
-    const taskList = useSelector((state) => state.tasks);
+    const dispatch = useDispatch()
+    const { error } = useSelector((state) => state.tasks);
+    
     useEffect(() => {
-        // LISTEN TO TASKS REDUCER CHANGES AND SAVE TO MMKV IF CHANGE OCCUR
-        mmkv.set('taskList', JSON.stringify(taskList));
-    }, [taskList])
+        // LISTEN TO ERROR
+        if(error){
+          dispatch(ACTION_MODAL_SHOWHIDE({
+            visible: true,
+            modalType: 'messageModal',
+            params: {
+                message: 'An error has occured',
+                contentType: 'error'
+            }
+          }))
+        }
+    }, [error])
+
+    
+    useEffect(() => {
+        // ==== DELETE TASKS FROM MMKV - FOR TESTING PURPOSES ==== //
+        /* set  "clean" to true to clean every app reload, false to do not clean */
+        if(__DEV__){
+          let clean = false; 
+          if(clean){
+            mmkv.set('storeTasks', '[]')
+            if(__DEV__) console.log('storeTasks clean')
+          }
+        }
+    }, []);
 
     return(
         <NavigationContainer>

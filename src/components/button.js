@@ -4,6 +4,7 @@ import { Pressable, View, Text, StyleSheet } from 'react-native'
 import * as STYLE from '@styles/global';
 import { CUSTOM_TEXT } from './text';
 import * as SVG from './svg';
+import { CUSTOM_LOADER } from './loader';
 
 /* PARAMS
     - type - string (options: 'primary', 'secondary', 'gray', 'plain') - button type
@@ -37,6 +38,7 @@ const BUTTON  = ({
     customTextStyle = null,
     icon = null,
     isBlock = true,
+    showLoader = false,
     ...props
 }) => {
 
@@ -44,11 +46,18 @@ const BUTTON  = ({
     return(
         <View style={!isBlock ? STYLE.FLEX.LEFT_CENTER_ROW : {}}>
             <Pressable
+                disabled={showLoader}
                 {...props}
-            >
+            >   
                 <View style={[styles[type], customStyles]}>
-                    {icon != null ? iconlist[icon] : <View />}
-                    {text != null ? <CUSTOM_TEXT text={text} textType={textStyle} /> : <View /> }
+                {showLoader ? (
+                    <CUSTOM_LOADER loaderColor={STYLE.COLORS.white}/>
+                ) : (
+                    <>
+                        {icon != null ? iconlist[icon] : <View />}
+                        {text != null ? <CUSTOM_TEXT text={text} textType={textStyle} /> : <View /> }
+                    </>
+                )}
                 </View>
             </Pressable>
         </View>
