@@ -22,7 +22,7 @@ export default () => {
     const { tasks, isLoading }= useSelector((state) => state.tasks);
 
     // for bookmark or tasks tab
-    const [currentTab, setCurrentTab] = useState('Tasks')
+    const [currentTab, setCurrentTab] = useState(tabslist[0])
 
     // for sort alphabetically
     // 0 = unsort, 1 = asc sort, 2 = desc sort
@@ -47,13 +47,12 @@ export default () => {
 
     useEffect(() => {
         // listen to alphabetical arrange toggle
-        sortList();
+        sortList(searchText);
     }, [azToggle])
 
     const sortList = (search = searchText) => {
         startTransition(() => {
             let list = tasks;
-
             // search by title
             if(!UTILS.isEmpty(search)){
                 list = list.filter((task) => task.title.toLowerCase().includes(search.toLowerCase()))
@@ -118,7 +117,7 @@ export default () => {
     const onChangeSearch = useCallback((e) => {
         setSearchText(e)
         sortList(e)
-    }, [searchText])
+    }, [searchText, tasks, azToggle])
 
 
     const onTaskCheck = useCallback((id) => {

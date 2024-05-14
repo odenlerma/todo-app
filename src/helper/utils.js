@@ -30,10 +30,10 @@ export const sort = (arr, type, param) => {
         let fa = a[param].toLowerCase(),
             fb = b[param].toLowerCase();
     
-        if (fa < fb) {
+        if (fa < fb) { // a should come before b
             return -1;
         }
-        if (fa > fb) {
+        if (fa > fb) {// a should come after a
             return 1;
         }
         return 0;
